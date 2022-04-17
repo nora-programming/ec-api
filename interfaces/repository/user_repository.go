@@ -1,6 +1,7 @@
-package database
+package repository
 
 import (
+	"mime/multipart"
 	"net/http"
 	"time"
 
@@ -106,4 +107,15 @@ func (r *UserRepository) Signout(c echo.Context) error {
 	c.SetCookie(cookie)
 
 	return nil
+}
+
+func (r *UserRepository) Update(userID int, name string, file *multipart.FileHeader) (*domain.User, error) {
+	// TODO file情報でS3にアップロード
+	var user *domain.User
+	result := r.DB.First(&user, userID).Updates(&domain.User{Name: name})
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return user, nil
 }

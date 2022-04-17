@@ -1,6 +1,8 @@
 package usecase
 
 import (
+	"mime/multipart"
+
 	"github.com/labstack/echo"
 	"github.com/nora-programming/ec-api/domain"
 )
@@ -23,4 +25,8 @@ func (interactor *UserInteractor) Signup(email string, password string) (t strin
 
 func (interactor *UserInteractor) Signout(c echo.Context) error {
 	return interactor.UserRepository.Signout(c)
+}
+
+func (interactor *UserInteractor) Update(userID int, name string, file *multipart.FileHeader) (*domain.User, error) {
+	return interactor.UserRepository.Update(userID, name, file)
 }

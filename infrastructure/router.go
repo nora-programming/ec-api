@@ -38,6 +38,7 @@ func (r *Routing) Run() {
 
 	api.GET("/me", userController.Me)
 	api.DELETE("/signout", userController.Signout)
+	api.PUT("/users/:id", userController.Update)
 	e.POST("/signin", userController.Signin)
 	e.POST("/signup", userController.Signup)
 

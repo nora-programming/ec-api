@@ -6,7 +6,7 @@ import (
 
 	"github.com/labstack/echo"
 	"github.com/nora-programming/ec-api/domain"
-	"github.com/nora-programming/ec-api/interfaces/database"
+	"github.com/nora-programming/ec-api/interfaces/repository"
 	"github.com/nora-programming/ec-api/usecase"
 
 	"gorm.io/gorm"
@@ -16,6 +16,7 @@ type UserController struct {
 	Interactor usecase.UserInteractor
 }
 
+// TODO S3のimgURLを返す
 type UserResponse struct {
 	ID    int
 	Name  string
@@ -25,7 +26,7 @@ type UserResponse struct {
 func NewUserController(db *gorm.DB) *UserController {
 	return &UserController{
 		Interactor: usecase.UserInteractor{
-			UserRepository: &database.UserRepository{
+			UserRepository: &repository.UserRepository{
 				DB: db,
 			},
 		},
@@ -115,4 +116,24 @@ func (controller *UserController) Signout(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 	return c.JSON(http.StatusOK, nil)
+}
+
+func (controller *UserController) Update(c echo.Context) error {
+	if c.Get("user_id") == nil {
+		return nil
+	}
+	file, _ := c.FormFile("file")
+	name := c.FormValue("name")
+	userID := c.Get("user_id").(int)
+
+	user, err := controller.Interactor.Update(userID, name, file)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
+	}
+	userRes := &UserResponse{
+		ID:    user.ID,
+		Name:  user.Name,
+		Email: user.Email,
+	}
+	return c.JSON(http.StatusOK, userRes)
 }
