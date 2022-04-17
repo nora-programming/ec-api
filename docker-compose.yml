@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  db:
+    image: mysql:5.7.30
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USERNAME: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - ec-db-data:/var/lib/mysql
+    container_name: ec-api
+
+volumes:
+  ec-db-data:
