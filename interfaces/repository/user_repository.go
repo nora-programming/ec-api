@@ -1,8 +1,12 @@
 package repository
 
 import (
+	"fmt"
+	"io"
 	"mime/multipart"
 	"net/http"
+	"os"
+	"strconv"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -110,9 +114,26 @@ func (r *UserRepository) Signout(c echo.Context) error {
 }
 
 func (r *UserRepository) Update(userID int, name string, file *multipart.FileHeader) (*domain.User, error) {
-	// TODO file情報でS3にアップロード
 	var user *domain.User
+
+	src, err := file.Open()
+	if err != nil {
+		return nil, err
+	}
+	defer src.Close()
+
+	dst, err := os.Create(fmt.Sprintf("images/users/%s", strconv.Itoa(userID)))
+	if err != nil {
+		return nil, err
+	}
+	defer dst.Close()
+
+	if _, err = io.Copy(dst, src); err != nil {
+		return nil, err
+	}
+
 	result := r.DB.First(&user, userID).Updates(&domain.User{Name: name})
+
 	if result.Error != nil {
 		return nil, result.Error
 	}

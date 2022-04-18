@@ -35,10 +35,13 @@ func (r *Routing) Run() {
 	api.Use(middlewares.SetUserID)
 
 	userController := controllers.NewUserController(r.db)
+	productController := controllers.NewProductController(r.db)
 
 	api.GET("/me", userController.Me)
 	api.DELETE("/signout", userController.Signout)
 	api.PUT("/users/:id", userController.Update)
+	api.POST("/products", productController.Create)
+
 	e.POST("/signin", userController.Signin)
 	e.POST("/signup", userController.Signup)
 

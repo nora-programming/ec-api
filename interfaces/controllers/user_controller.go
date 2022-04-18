@@ -130,6 +130,7 @@ func (controller *UserController) Update(c echo.Context) error {
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
+
 	userRes := &UserResponse{
 		ID:    user.ID,
 		Name:  user.Name,
