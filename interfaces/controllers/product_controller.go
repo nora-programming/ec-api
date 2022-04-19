@@ -42,3 +42,23 @@ func (controller *ProductController) Create(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, product)
 }
+func (controller *ProductController) List(c echo.Context) error {
+	products, err := controller.Interactor.List()
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
+	}
+	return c.JSON(http.StatusOK, products)
+}
+
+func (controller *ProductController) PurchasedProducts(c echo.Context) error {
+	if c.Get("user_id") == nil {
+		return nil
+	}
+	userIDInt, _ := c.Get("user_id").(int)
+	userID := strconv.Itoa(userIDInt)
+	purchased_products, err := controller.Interactor.PurchasedProducts(userID)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
+	}
+	return c.JSON(http.StatusOK, purchased_products)
+}
