@@ -62,3 +62,17 @@ func (controller *ProductController) PurchasedProducts(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, purchased_products)
 }
+
+func (controller *ProductController) Delete(c echo.Context) error {
+	if c.Get("user_id") == nil {
+		return nil
+	}
+	userIDInt, _ := c.Get("user_id").(int)
+	productId := c.Param("id")
+
+	err := controller.Interactor.Delete(userIDInt, productId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
+	}
+	return c.NoContent(http.StatusOK)
+}

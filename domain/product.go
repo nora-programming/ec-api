@@ -15,3 +15,8 @@ type PurchasedProducts struct {
 	Price       int    `json:"price"`
 	Name        string `json:"creater_name"`
 }
+
+type ProductWithImg struct {
+	Product
+	ImgUrl string `json:"img_url"`
+}

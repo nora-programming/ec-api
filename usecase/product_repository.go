@@ -7,7 +7,8 @@ import (
 )
 
 type ProductRepository interface {
-	Create(userID int, title string, description string, price int, file *multipart.FileHeader) (*domain.Product, error)
-	List() ([]domain.Product, error)
+	Create(userID int, title string, description string, price int, file *multipart.FileHeader) (*domain.ProductWithImg, error)
+	List() ([]domain.ProductWithImg, error)
 	PurchasedProducts(userID string) ([]domain.PurchasedProducts, error)
+	Delete(userID int, productID string) error
 }

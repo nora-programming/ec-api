@@ -43,13 +43,7 @@ func (controller *UserController) Me(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 
-	userRes := &UserResponse{
-		ID:    user.ID,
-		Name:  user.Name,
-		Email: user.Email,
-	}
-
-	return c.JSON(http.StatusOK, userRes)
+	return c.JSON(http.StatusOK, user)
 }
 
 func (controller *UserController) Signin(c echo.Context) error {
@@ -71,13 +65,7 @@ func (controller *UserController) Signin(c echo.Context) error {
 	cookie.HttpOnly = true
 	c.SetCookie(cookie)
 
-	userRes := &UserResponse{
-		ID:    u.ID,
-		Name:  u.Name,
-		Email: u.Email,
-	}
-
-	return c.JSON(http.StatusOK, userRes)
+	return c.JSON(http.StatusOK, u)
 }
 
 func (controller *UserController) Signup(c echo.Context) error {
@@ -101,13 +89,7 @@ func (controller *UserController) Signup(c echo.Context) error {
 	cookie.HttpOnly = true
 	c.SetCookie(cookie)
 
-	userRes := &UserResponse{
-		ID:    u.ID,
-		Name:  u.Name,
-		Email: u.Email,
-	}
-
-	return c.JSON(http.StatusOK, userRes)
+	return c.JSON(http.StatusOK, u)
 }
 
 func (controller *UserController) Signout(c echo.Context) error {
@@ -131,10 +113,5 @@ func (controller *UserController) Update(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 
-	userRes := &UserResponse{
-		ID:    user.ID,
-		Name:  user.Name,
-		Email: user.Email,
-	}
-	return c.JSON(http.StatusOK, userRes)
+	return c.JSON(http.StatusOK, user)
 }
